@@ -3,7 +3,7 @@
 
 GameState::GameState() {
 	music.load("music/pacman_chomp.wav");
-	mapImage.load("images/map3.png");
+	mapImage.load("images/map2.png");
 	map = MapBuilder().createMap(mapImage);
 }
 void GameState::tick() {
@@ -19,7 +19,7 @@ void GameState::tick() {
         map->getPlayer()->setScore(0);
         GameState(); {
         music.load("music/pacman_chomp.wav");
-        mapImage.load("images/map3.png");
+        mapImage.load("images/map2.png");
         map = MapBuilder().createMap(mapImage);
         }
 
@@ -27,7 +27,7 @@ void GameState::tick() {
 	if(map->getPlayer()->getDots() == 0){
         setFinished(true);
         setNextState("Win");
-        mapImage.load("images/map3.png");
+        mapImage.load("images/map2.png");
         map = MapBuilder().createMap(mapImage);
     }		
 	}
