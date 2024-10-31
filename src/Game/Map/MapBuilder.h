@@ -10,6 +10,7 @@ class MapBuilder {
     public:
         MapBuilder();
 	    Map* createMap(ofImage);
+        Entity* getRandomDot(Map* map);
 
 	private:
         vector<ofImage> bound;

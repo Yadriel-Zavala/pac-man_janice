@@ -13,7 +13,11 @@ void Map::tick(){
 void Map::render(){
     ofSetBackgroundColor(0, 0, 0);
 	entityManager->render();
-	player->render();
+	if(player->renderEntity == true) {
+		player->render();
+	} else {
+		player->invisCounter--;
+	}
 
 }
 
@@ -43,6 +47,11 @@ void Map::setPlayer(Player* p){
 Player* Map::getPlayer(){
 	return player;
 }
+
+EntityManager* Map::getEntityManager() {
+	return this->entityManager;
+}
+
 void Map::setGhostSpawner(GhostSpawner* p){
     gs = p;
 }

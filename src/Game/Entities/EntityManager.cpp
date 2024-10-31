@@ -1,5 +1,12 @@
 #include "EntityManager.h"
 #include "Ghost.h"
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <unistd.h>
+#endif
+
+
 void EntityManager::tick(){
     if(killable){
         killableCounter--;
@@ -33,8 +40,12 @@ void EntityManager::tick(){
 
         }else{
             Ghost* ghostPtr = dynamic_cast<Ghost*>(ghosts[i]);
-            ghosts.erase(ghosts.begin() + i--);
-            delete ghostPtr;
+            ghostPtr->hasBeenEaten = true;
+            ghostPtr->tick();
+            
+            
+            
+            // delete ghostPtr;
         }
     }
 

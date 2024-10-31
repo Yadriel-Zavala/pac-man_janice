@@ -16,18 +16,21 @@ Ghost::Ghost(int x, int y, int width, int height, ofImage spriteSheet, EntityMan
     killableAnim = new Animation(10, killableFrames);
 
     if(color == "red")      sprite.cropFrom(spriteSheet,456,64,16,16);
-    else if(color=="pink")  sprite.cropFrom(spriteSheet,456,79,16,16);
+    else if(color=="pink")  sprite.cropFrom(spriteSheet,456,78,16,16);
     else if(color=="cyan")  sprite.cropFrom(spriteSheet,456,96,16,16);
     else if(color=="orange")sprite.cropFrom(spriteSheet,456,113,16,16);
+    this->color = color;
     
 
 }
 
 void Ghost::tick(){
-    killableAnim->tick();
+    if(!hasBeenEaten) {
+        killableAnim->tick();
+    }
     canMove = true;
     checkCollisions();
-    if(canMove){
+    if(canMove && !hasBeenEaten){
         if(facing == UP){
             y-= speed;
         }else if(facing == DOWN){
@@ -37,6 +40,8 @@ void Ghost::tick(){
         }else if(facing == RIGHT){
             x+=speed;
         }
+        previousCoordsY.push_back(y);
+        previousCoordsX.push_back(x);
     }else{
         int randInt;
         if(justSpawned){
@@ -55,7 +60,44 @@ void Ghost::tick(){
             facing = UP;
         }
         justSpawned = false;
+    }
 
+    if(!previousCoordsSet && hasBeenEaten) {
+        i = previousCoordsX.size()-1;
+        j = previousCoordsY.size()-1;
+        previousCoordsSet = true;
+    }
+
+    if(hasBeenEaten) {
+        if(this->previousCoordsX[0] == this->x && this->previousCoordsY[0] == this->y) {
+            this->sprite = oldSprite;
+            this->hasBeenEaten = false;
+            this->remove = false;
+            this->noCollision = false;
+            this->setKillable(false);
+            previousCoordsSet = false;
+            previousCoordsX.clear();
+            previousCoordsY.clear();
+
+            if(color == "red")      sprite.cropFrom(spritesheet,456,64,16,16);
+            else if(color=="pink")  sprite.cropFrom(spritesheet,456,78,16,16);
+            else if(color=="cyan")  sprite.cropFrom(spritesheet,456,96,16,16);
+            else if(color=="orange")sprite.cropFrom(spritesheet,456,113,16,16);
+
+        } else {
+            spritesheet.load("images/Background.png");
+            noCollision = true;
+            oldSprite = this->sprite;
+            this->sprite.cropFrom(spritesheet, 600,80,14,14);
+                
+            this->setPosX(this->previousCoordsX[i]);
+            this->setPosY(this->previousCoordsY[i]);
+
+            this->setKillable(false);
+
+            i--;
+            j--;
+        }
     }
 }
 

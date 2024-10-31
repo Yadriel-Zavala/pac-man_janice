@@ -2,6 +2,7 @@
 
 #include "Animation.h"
 #include "EntityManager.h"
+#include "Powerup.h"
 
 enum MOVING {
 	MUP,
@@ -18,6 +19,8 @@ class Player: public Entity{
         bool canMoveUp, canMoveDown, canMoveRight, canMoveLeft;
         int speed = 4;
         bool walking = false;
+        bool containsPowerup = false;
+        bool ultimateKeySpawned = false;
         MOVING moving;
         FACING facing = DOWN;
         ofImage up, down, left, right;
@@ -26,6 +29,7 @@ class Player: public Entity{
         Animation *walkLeft;
         Animation *walkRight;
         EntityManager* em;
+        Powerup* powerup;
 
     public:
         Player(int, int, int , int, EntityManager*);
@@ -33,6 +37,8 @@ class Player: public Entity{
         int getHealth();
         int getScore();
         FACING getFacing();
+        void setPosX(int);
+        void setPosY(int);
         void setHealth(int);
         void setScore(int);
         void setFacing(FACING facing);
@@ -45,4 +51,9 @@ class Player: public Entity{
         void reset();
         void checkCollisions();
         void die();
+        int getDots();
+
+        vector<Powerup*> powerupList;
+        ofImage spritesheet;
+        int unkillableTimer = 10*30;
 };

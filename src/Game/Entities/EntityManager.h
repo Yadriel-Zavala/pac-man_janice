@@ -12,6 +12,9 @@ public:
 	void tick();
 	void render();
 	void setKillable(bool);
+	ofImage spritesheet;
+	int ghostBackTimer = 30;
+	int i;
 
 private:
 	bool killable = false;

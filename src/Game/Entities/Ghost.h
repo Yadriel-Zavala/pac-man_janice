@@ -11,8 +11,17 @@ class Ghost: public Entity{
         void render();
         bool getKillable();
         void setKillable(bool);
+        void backtrack();
+        vector<int> previousCoordsX;
+        vector<int> previousCoordsY;
+        bool hasBeenEaten = false;
+        ofImage spritesheet;
+        int i, j;
+        string color;
+        bool noCollision = false;
+        bool killable;
     private:
-        bool killable = false;
+        bool previousCoordsSet = false;
         FACING facing = UP;
         bool canMove = true;
         bool justSpawned=true;
@@ -20,5 +29,9 @@ class Ghost: public Entity{
         int speed=2;
         EntityManager* em;
         Animation* killableAnim;
+        ofImage oldSprite;
+        
+
+        
 
 };

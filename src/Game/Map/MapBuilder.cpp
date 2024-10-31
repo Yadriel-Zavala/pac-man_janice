@@ -1,4 +1,7 @@
 #include "MapBuilder.h"
+#include "Cherry.h"
+#include "Strawberry.h"
+#include "RandomFruit.h"
 
 
 MapBuilder::MapBuilder(){
@@ -48,6 +51,10 @@ Map* MapBuilder::createMap(ofImage mapImage){
 	int xOffset = (ofGetWidth() - mapImage.getWidth()*pixelMultiplier)/2;
 	int yOffset = (ofGetHeight() - mapImage.getHeight()*pixelMultiplier)/2;
 
+	bool cherrySpawned = false;
+	bool strawberrySpawned = false;
+	bool randomFruitSpawned = false;
+
 	ofPixels pixels = mapImage.getPixels();
 	Map* mapInCreation =  new Map(entityManager);
     for (int i = 0; i < mapImage.getWidth(); i++) {
@@ -74,6 +81,33 @@ Map* MapBuilder::createMap(ofImage mapImage){
         }
 
     }
+	if(!cherrySpawned) {
+		//spawn cherry
+		Entity* toSpawnOn = getRandomDot(mapInCreation);
+		int xPos = toSpawnOn->getPosX();
+		int yPos = toSpawnOn->getPosY();
+		Cherry* cherry = new Cherry(xPos, yPos, pixelMultiplier, pixelMultiplier, pacmanSpriteSheet);
+		mapInCreation->addEntity(cherry);
+		cherrySpawned = true;
+	}
+	if(!strawberrySpawned) {
+		//spawn strawberry
+		Entity* toSpawnOn = getRandomDot(mapInCreation);
+		int xPos = toSpawnOn->getPosX();
+		int yPos = toSpawnOn->getPosY();
+		Strawberry* strawberry = new Strawberry(xPos, yPos, pixelMultiplier, pixelMultiplier, pacmanSpriteSheet);
+		mapInCreation->addEntity(strawberry);
+		strawberrySpawned = true;
+	}
+	if(!randomFruitSpawned) {
+		Entity* toSpawnOn = getRandomDot(mapInCreation);
+		int xPos = toSpawnOn->getPosX();
+		int yPos = toSpawnOn->getPosY();
+		RandomFruit* randomFruit = new RandomFruit(xPos, yPos, pixelMultiplier, pixelMultiplier, pacmanSpriteSheet);
+		mapInCreation->addEntity(randomFruit);
+		strawberrySpawned = true;
+	}
+
     return mapInCreation;
 
 }
@@ -159,4 +193,13 @@ ofImage MapBuilder::getSprite(ofImage mapImage, int i, int j){
 
 		return  bound[0];
 	}
+}
+
+Entity* MapBuilder::getRandomDot(Map* map) {
+	Dot* randDot;
+	do {
+		Entity* toSpawnOn = map->getEntityManager()->entities[ofRandom(map->getEntityManager()->entities.size())];
+		randDot = dynamic_cast<Dot*>(toSpawnOn);
+	} while(randDot == nullptr);
+	return randDot;
 }

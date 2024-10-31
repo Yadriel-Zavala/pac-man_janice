@@ -1,33 +1,39 @@
 #include "ofApp.h"
 //--------------------------------------------------------------
 void ofApp::setup(){
-	ofSetFrameRate(30);
-	ofSetWindowTitle("C++ Game Box");
-	//States
-	menuState = new MenuState();
-	gameState = new GameState();
-	gameOverState = new GameOverState();
-	// Initial State
-	currentState = menuState;
+    ofSetFrameRate(30);
+    ofSetWindowTitle("C++ Game Box");
+    //States
+    menuState = new MenuState();
+    gameState = new GameState();
+    gameOverState = new GameOverState();
+    pauseState = new PauseState();
+    winState = new WinState();
+    // Initial State
+    currentState = menuState;
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	if (currentState != nullptr){
-		currentState->tick();
-		if(currentState->hasFinished()){
-			if(currentState->getNextState() == "Menu"){
-				currentState = menuState;
-			}else if(currentState->getNextState() == "Game"){
-				currentState = gameState;
-			}else if(currentState->getNextState() == "over"){
-				gameOverState->setScore(gameState->getFinalScore());
-				currentState = gameOverState;
-			}
-			currentState->reset();
-		}
-	}
-		
+    if (currentState != nullptr){
+        currentState->tick();
+        if(currentState->hasFinished()){
+            if(currentState->getNextState() == "Menu"){
+                currentState = menuState;
+            }else if(currentState->getNextState() == "Game"){
+                currentState = gameState;
+            }else if(currentState->getNextState() == "over"){
+                gameOverState->setScore(gameState->getFinalScore());
+                currentState = gameOverState;
+            }else if(currentState->getNextState() == "Pause"){
+                currentState = pauseState;
+            }else if(currentState->getNextState() == "Win"){
+                currentState = winState;
+            }
+            currentState->reset();
+        }
+    }
+        
 }
 
 //--------------------------------------------------------------
@@ -38,18 +44,8 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-	if (currentState != nullptr){
+	if (currentState != nullptr)
 		currentState->keyPressed(key);
-	}
-	//Turn Volume Down (Mute)	
-	if( key == '-' ){
-		ofSoundSetVolume(0);
-	}
-	
-	//Turn Volume Back Up
-	if( key == '=' ){
-		ofSoundSetVolume(1);
-	}
 
 }
 
